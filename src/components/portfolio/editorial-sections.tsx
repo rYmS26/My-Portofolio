@@ -50,7 +50,7 @@ export function FeaturedShowcaseGrid({
     const projectItems: FeaturedItem[] = projects.map((project) => ({
       id: project.id,
       kind: "project",
-      href: `/projects/${project.slug}`,
+      href: `/#project-${project.slug}`,
       code: project.code,
       title: project.title,
       subtitle: project.client_or_company,
@@ -180,11 +180,11 @@ export function FeaturedShowcaseGrid({
 
       <div className="pt-2 flex items-center justify-center gap-2.5">
         <Link
-          href={filter === "notes" ? "/notes" : "/projects"}
+          href={filter === "notes" ? "/notes" : "/#projects"}
           className="h-9 px-4 rounded-full inline-flex items-center gap-1.5 text-xs font-medium bg-zinc-900 text-white hover:bg-zinc-800 shadow-xs transition-[color,background-color,transform] duration-150 ease-out active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2"
         >
           <span>
-            {filter === "notes" ? "Semua Catatan Teknis" : "Show More Projects"}
+            {filter === "notes" ? "Semua Catatan Teknis" : "Lihat Detail Projects"}
           </span>
           <ArrowRight className="size-3.5" aria-hidden="true" />
         </Link>
@@ -333,7 +333,11 @@ export function ProjectsAccordion({
         {projects.map((project) => {
           const isOpen = openIds.includes(project.id);
           return (
-            <div key={project.id} className="bg-white">
+            <div
+              key={project.id}
+              id={`project-${project.slug}`}
+              className="bg-white scroll-mt-16"
+            >
               <button
                 type="button"
                 aria-expanded={isOpen}
@@ -370,6 +374,21 @@ export function ProjectsAccordion({
                     {project.summary}
                   </p>
 
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs leading-relaxed text-zinc-600">
+                    <div className="bg-white border border-zinc-200/80 rounded-lg p-3 space-y-1">
+                      <span className="block font-mono text-[11px] uppercase tracking-wider text-zinc-400">
+                        Arsitektur Sistem
+                      </span>
+                      <p className="text-pretty">{project.architecture_overview}</p>
+                    </div>
+                    <div className="bg-white border border-zinc-200/80 rounded-lg p-3 space-y-1">
+                      <span className="block font-mono text-[11px] uppercase tracking-wider text-zinc-400">
+                        Tantangan Teknis
+                      </span>
+                      <p className="text-pretty">{project.technical_challenges}</p>
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                     {project.key_metrics.map((metric) => (
                       <div
@@ -403,19 +422,12 @@ export function ProjectsAccordion({
                   </div>
 
                   <div className="pt-1 flex flex-wrap items-center gap-3 text-xs">
-                    <Link
-                      href={`/projects/${project.slug}`}
-                      className="inline-flex items-center gap-1 font-medium text-zinc-900 hover:text-emerald-700 transition-colors"
-                    >
-                      <span>Baca Arsitektur Lengkap</span>
-                      <ArrowRight className="size-3.5" aria-hidden="true" />
-                    </Link>
                     {project.repo_url && (
                       <a
                         href={project.repo_url}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1 text-zinc-500 hover:text-zinc-900 transition-colors"
+                        className="inline-flex items-center gap-1 font-medium text-zinc-900 hover:text-emerald-700 transition-colors"
                       >
                         <GitBranch className="size-3.5" aria-hidden="true" />
                         <span>Repository</span>
@@ -426,7 +438,7 @@ export function ProjectsAccordion({
                         href={project.live_url}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1 text-zinc-500 hover:text-zinc-900 transition-colors"
+                        className="inline-flex items-center gap-1 text-zinc-600 hover:text-zinc-900 transition-colors"
                       >
                         <span>Live Demo</span>
                         <ArrowUpRight className="size-3.5" aria-hidden="true" />
@@ -438,16 +450,6 @@ export function ProjectsAccordion({
             </div>
           );
         })}
-      </div>
-
-      <div className="py-5 px-5 border-t border-zinc-200/80 flex justify-center bg-white">
-        <Link
-          href="/projects"
-          className="h-9 px-4 rounded-full inline-flex items-center gap-1.5 text-xs font-medium bg-zinc-900 text-white hover:bg-zinc-800 shadow-xs transition-[color,background-color,transform] duration-150 ease-out active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2"
-        >
-          <span>Show All Projects ({projects.length})</span>
-          <ArrowRight className="size-3.5" aria-hidden="true" />
-        </Link>
       </div>
     </div>
   );

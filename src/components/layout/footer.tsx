@@ -62,10 +62,10 @@ export function Footer({ profile }: { profile: ProfileSettings }) {
 
           <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-zinc-500">
             <Link
-              href="/projects"
+              href="/#projects"
               className="hover:text-zinc-900 transition-colors"
             >
-              Case Studies
+              Projects
             </Link>
             <span className="text-zinc-300">/</span>
             <Link

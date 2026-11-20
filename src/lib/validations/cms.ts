@@ -120,8 +120,11 @@ export type NoteFormValues = z.infer<typeof noteFormSchema>;
 export const profileSettingsSchema = z.object({
   full_name: z.string().trim().min(2, "Nama lengkap wajib diisi."),
   headline: z.string().trim().min(5, "Headline peran wajib diisi."),
+  bio: z.string().trim().min(20, "Bio ringkas minimal 20 karakter."),
   location: z.string().trim().min(3, "Lokasi domisili wajib diisi."),
   email: z.string().trim().email("Format email tidak valid."),
+  github_url: z.string().trim().url("Format URL GitHub tidak valid."),
+  linkedin_url: z.string().trim().url("Format URL LinkedIn tidak valid."),
   availability_status: z.enum(AVAILABILITY_STATUSES),
   availability_note: z
     .string()

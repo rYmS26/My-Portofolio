@@ -75,6 +75,14 @@ export default async function HomePage() {
     }))
   );
 
+  const currentRole = experiences.find((exp) => exp.is_current) ?? experiences[0];
+  const githubHandle = profile.github_url
+    .replace(/^https?:\/\/(www\.)?github\.com\//i, "@")
+    .replace(/\/$/, "");
+  const linkedinHandle = profile.linkedin_url
+    .replace(/^https?:\/\/(www\.)?linkedin\.com\//i, "")
+    .replace(/\/$/, "");
+
   const initials = profile.full_name
     .split(",")[0]
     .trim()
@@ -174,7 +182,11 @@ export default async function HomePage() {
             <div className="divide-y divide-zinc-100 px-5 py-2">
               <div className="py-2 flex items-center gap-2.5 text-zinc-600">
                 <Code2 className="size-4 text-zinc-400 shrink-0" aria-hidden="true" />
-                <span>Lead Full-Stack Engineer @ Nusantara Finansial</span>
+                <span>
+                  {currentRole
+                    ? `${currentRole.role_title} @ ${currentRole.company_name}`
+                    : profile.headline}
+                </span>
               </div>
               <div className="py-2 flex items-center gap-2.5 text-zinc-600">
                 <MapPin className="size-4 text-zinc-400 shrink-0" aria-hidden="true" />
@@ -194,17 +206,19 @@ export default async function HomePage() {
             <div className="divide-y divide-zinc-100 px-5 py-2">
               <div className="py-2 flex items-center gap-2.5 text-zinc-600">
                 <Globe className="size-4 text-zinc-400 shrink-0" aria-hidden="true" />
-                <span className="font-mono">devfolio.id</span>
+                <span className="font-mono">
+                  {profile.email.split("@")[1] ?? "devfolio.id"}
+                </span>
               </div>
               <div className="py-2 flex items-center gap-2.5 text-zinc-600">
                 <Briefcase className="size-4 text-zinc-400 shrink-0" aria-hidden="true" />
                 <span className="tabular-nums">
-                  {profile.years_of_experience}+ Tahun • B2B SaaS & FinTech Ledger
+                  {profile.years_of_experience}+ Tahun • {profile.systems_architected} Sistem Produksi
                 </span>
               </div>
               <div className="py-2 flex items-center gap-2.5 text-emerald-700 font-medium">
                 <ShieldCheck className="size-4 text-emerald-600 shrink-0" aria-hidden="true" />
-                <span>Tersedia untuk Hire & Architecture Advisory</span>
+                <span className="truncate">{profile.availability_note}</span>
               </div>
             </div>
           </div>
@@ -223,7 +237,7 @@ export default async function HomePage() {
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-zinc-900">GitHub</p>
                   <p className="text-xs font-mono text-zinc-500 truncate">
-                    @arifpratama-eng
+                    {githubHandle}
                   </p>
                 </div>
               </div>
@@ -246,7 +260,7 @@ export default async function HomePage() {
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-zinc-900">LinkedIn</p>
                   <p className="text-xs font-mono text-zinc-500 truncate">
-                    in/arifpratama-eng
+                    {linkedinHandle}
                   </p>
                 </div>
               </div>
@@ -509,7 +523,7 @@ export default async function HomePage() {
       <SectionHatchedDivider />
 
       {/* 7B. SECTION PROJECTS (Expandable Vertical Accordion) */}
-      <section>
+      <section id="projects" className="scroll-mt-14">
         <div className="max-w-3xl mx-auto border-x border-zinc-200/80">
           <div className="px-5 py-3 border-b border-zinc-200/80 flex items-center justify-between">
             <div className="flex items-center gap-2">

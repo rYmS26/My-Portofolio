@@ -59,8 +59,11 @@ export function SettingsManager({
     defaultValues: {
       full_name: initialProfile.full_name,
       headline: initialProfile.headline,
+      bio: initialProfile.bio,
       location: initialProfile.location,
       email: initialProfile.email,
+      github_url: initialProfile.github_url,
+      linkedin_url: initialProfile.linkedin_url,
       availability_status: initialProfile.availability_status,
       availability_note: initialProfile.availability_note,
     },
@@ -189,6 +192,44 @@ export function SettingsManager({
             error={errors.email?.message}
             {...register("email")}
           />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Input
+            label="URL GitHub"
+            type="url"
+            placeholder="https://github.com/username"
+            error={errors.github_url?.message}
+            {...register("github_url")}
+          />
+          <Input
+            label="URL LinkedIn"
+            type="url"
+            placeholder="https://linkedin.com/in/username"
+            error={errors.linkedin_url?.message}
+            {...register("linkedin_url")}
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="profile-bio"
+            className="block text-xs font-medium text-zinc-700 mb-1.5"
+          >
+            Bio Ringkas (Tampil di Section About & Metadata SEO)
+          </label>
+          <textarea
+            id="profile-bio"
+            rows={3}
+            className="w-full p-3 rounded-lg border border-zinc-300 bg-white text-sm text-zinc-900 shadow-2xs focus-visible:border-zinc-900 focus-visible:ring-1 focus-visible:ring-zinc-900 focus-visible:outline-none"
+            {...register("bio")}
+          />
+          {errors.bio?.message && (
+            <p className="text-xs text-red-600 mt-1.5 flex items-center gap-1.5">
+              <AlertCircle className="size-3.5 shrink-0" aria-hidden="true" />
+              <span>{errors.bio.message}</span>
+            </p>
+          )}
         </div>
 
         <div className="pt-3 border-t border-zinc-100 flex justify-end">
