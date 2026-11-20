@@ -1,10 +1,12 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { Database, Lock, Terminal } from "lucide-react";
+import { Database, Terminal } from "lucide-react";
 import { getAuthenticatedAdmin } from "@/lib/actions/auth";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { LoginForm } from "@/components/auth/login-form";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/ui-states";
 
 export const metadata: Metadata = {
   title: "Admin Login — CMS Workspace",
@@ -12,12 +14,40 @@ export const metadata: Metadata = {
     "Halaman otorisasi administrator portofolio untuk mengelola studi kasus arsitektur, artikel teknis, dan kotak masuk klien.",
 };
 
-export default async function LoginPage() {
+function LoginFormSkeleton() {
+  return (
+    <div
+      role="status"
+      aria-label="Memuat formulir login"
+      className="bg-white border border-zinc-200/80 shadow-xs rounded-xl p-6 space-y-5"
+    >
+      <div className="space-y-2 border-b border-zinc-100 pb-4">
+        <Skeleton className="h-5 w-48" />
+        <Skeleton className="h-3.5 w-64" />
+      </div>
+      <div className="space-y-4">
+        <Skeleton className="h-9 w-full rounded-lg" />
+        <Skeleton className="h-9 w-full rounded-lg" />
+        <Skeleton className="h-9 w-36 rounded-lg ml-auto" />
+      </div>
+    </div>
+  );
+}
+
+async function LoginGuardAndForm({
+  supabaseReady,
+}: {
+  supabaseReady: boolean;
+}) {
   const currentAdmin = await getAuthenticatedAdmin();
   if (currentAdmin) {
     redirect("/admin");
   }
 
+  return <LoginForm supabaseConfigured={supabaseReady} />;
+}
+
+export default function LoginPage() {
   const supabaseReady = isSupabaseConfigured();
 
   return (
@@ -83,7 +113,9 @@ export default async function LoginPage() {
         </div>
 
         <div className="lg:col-span-6">
-          <LoginForm supabaseConfigured={supabaseReady} />
+          <Suspense fallback={<LoginFormSkeleton />}>
+            <LoginGuardAndForm supabaseReady={supabaseReady} />
+          </Suspense>
         </div>
       </div>
     </div>

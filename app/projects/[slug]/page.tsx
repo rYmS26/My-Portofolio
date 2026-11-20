@@ -24,6 +24,13 @@ interface ProjectDetailPageProps {
   params: Promise<{ slug: string }>;
 }
 
+export async function generateStaticParams() {
+  const projects = await getPublishedProjects();
+  return projects.map((project) => ({
+    slug: project.slug,
+  }));
+}
+
 export async function generateMetadata({
   params,
 }: ProjectDetailPageProps): Promise<Metadata> {
