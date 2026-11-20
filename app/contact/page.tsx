@@ -12,9 +12,9 @@ import { HireMeForm } from "@/components/contact/hire-me-form";
 import { AvailabilityBadge, Badge } from "@/components/ui/badge";
 
 export const metadata: Metadata = {
-  title: "Jadwalkan Diskusi Teknis & Perekrutan (Hire Me)",
+  title: "Kontak & Hire Me — Royhan Muhammad Sabila",
   description:
-    "Hubungi Arif Pratama untuk peran Principal/Senior Full-Stack Engineer, konsultasi arsitektur PostgreSQL, atau rekayasa sistem Next.js.",
+    "Hubungi Royhan Muhammad Sabila untuk peluang Back End Developer, Website Developer (Laravel, PHP, JavaScript, Node.js, React.js), atau kolaborasi proyek web.",
 };
 
 export default async function ContactPage() {

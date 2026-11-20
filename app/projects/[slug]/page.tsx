@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -19,16 +20,10 @@ import {
   getPublishedProjects,
 } from "@/lib/data/repository";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/ui-states";
 
 interface ProjectDetailPageProps {
   params: Promise<{ slug: string }>;
-}
-
-export async function generateStaticParams() {
-  const projects = await getPublishedProjects();
-  return projects.map((project) => ({
-    slug: project.slug,
-  }));
 }
 
 export async function generateMetadata({
@@ -49,7 +44,17 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProjectDetailPage({
+function ProjectDetailSkeleton() {
+  return (
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-6">
+      <Skeleton className="h-5 w-44" />
+      <Skeleton className="h-8 w-2/3" />
+      <Skeleton className="h-40 w-full rounded-xl" />
+    </div>
+  );
+}
+
+async function ProjectDetailContent({
   params,
 }: ProjectDetailPageProps) {
   const { slug } = await params;
@@ -337,5 +342,13 @@ export default async function ProjectDetailPage({
         </section>
       )}
     </div>
+  );
+}
+
+export default function ProjectDetailPage(props: ProjectDetailPageProps) {
+  return (
+    <Suspense fallback={<ProjectDetailSkeleton />}>
+      <ProjectDetailContent {...props} />
+    </Suspense>
   );
 }

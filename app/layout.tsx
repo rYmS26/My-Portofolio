@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -39,10 +40,16 @@ export default async function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-white text-zinc-900 selection:bg-zinc-900 selection:text-white">
-        <Navbar
-          availabilityStatus={profile.availability_status}
-          fullName={profile.full_name}
-        />
+        <Suspense
+          fallback={
+            <header className="sticky top-0 z-30 h-12 bg-white/85 border-b border-zinc-200/80" />
+          }
+        >
+          <Navbar
+            availabilityStatus={profile.availability_status}
+            fullName={profile.full_name}
+          />
+        </Suspense>
         <main className="flex-1">{children}</main>
         <Footer profile={profile} />
       </body>

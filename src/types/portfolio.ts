@@ -55,7 +55,7 @@ export interface ProjectCaseStudy {
   created_at: string;
 }
 
-export type EmploymentType = "Full-time" | "Contract" | "Advisory";
+export type EmploymentType = "Full-time" | "Contract" | "Advisory" | "Internship";
 
 export interface WorkExperience {
   id: string;

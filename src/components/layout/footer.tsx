@@ -25,7 +25,7 @@ export function Footer({ profile }: { profile: ProfileSettings }) {
             Brand
           </span>
           <span className="text-[11px] font-mono text-zinc-400 tabular-nums">
-            DEVFOLIO.ID • MARK v2.6
+            ROYHAN.MS • PORTFOLIO
           </span>
         </div>
 

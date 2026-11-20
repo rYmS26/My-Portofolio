@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -20,17 +21,11 @@ import {
   NoteContentRenderer,
 } from "@/components/notes/note-content-renderer";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/ui-states";
 import { formatIndonesianDate } from "@/lib/utils";
 
 interface NoteDetailPageProps {
   params: Promise<{ slug: string }>;
-}
-
-export async function generateStaticParams() {
-  const notes = await getPublishedNotes();
-  return notes.map((note) => ({
-    slug: note.slug,
-  }));
 }
 
 export async function generateMetadata({
@@ -51,7 +46,17 @@ export async function generateMetadata({
   };
 }
 
-export default async function NoteDetailPage({ params }: NoteDetailPageProps) {
+function NoteDetailSkeleton() {
+  return (
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-6">
+      <Skeleton className="h-5 w-44" />
+      <Skeleton className="h-8 w-2/3" />
+      <Skeleton className="h-48 w-full rounded-xl" />
+    </div>
+  );
+}
+
+async function NoteDetailContent({ params }: NoteDetailPageProps) {
   const { slug } = await params;
   const [note, allNotes, profile] = await Promise.all([
     getNoteBySlug(slug),
@@ -201,5 +206,13 @@ export default async function NoteDetailPage({ params }: NoteDetailPageProps) {
         </section>
       )}
     </div>
+  );
+}
+
+export default function NoteDetailPage(props: NoteDetailPageProps) {
+  return (
+    <Suspense fallback={<NoteDetailSkeleton />}>
+      <NoteDetailContent {...props} />
+    </Suspense>
   );
 }

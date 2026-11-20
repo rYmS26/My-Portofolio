@@ -26,7 +26,7 @@ export interface NavbarProps {
 
 export function Navbar({
   availabilityStatus = "available",
-  fullName = "Arif Pratama",
+  fullName = "Royhan Muhammad Sabila",
 }: NavbarProps) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);

@@ -1,72 +1,89 @@
-export interface PeerTestimonial {
+export interface EducationEntry {
   id: string;
-  author: string;
-  role: string;
-  company: string;
-  initials: string;
-  quote: string;
-  verified: boolean;
+  institution: string;
+  degree_and_field: string;
+  period: string;
+  grade?: string;
+  skills: string[];
+}
+
+export interface CertificationEntry {
+  id: string;
+  title: string;
+  issuer: string;
+  issued: string;
+  expires: string;
+  credential_id: string;
+  credential_url: string;
 }
 
 export const ABOUT_HIGHLIGHTS: string[] = [
-  "Merancang mesin buku besar (double-entry ledger) berisolasi Serializable di PostgreSQL yang memproses 1,2 juta transaksi harian tanpa selisih saldo.",
-  "Membangun arsitektur Next.js App Router (Server Components & Server Actions) yang memangkas P95 latency hingga 64% pada dashboard B2B padat data.",
-  "Menegakkan standar TypeScript strict mode, validasi skema Zod end-to-end, serta isolasi multi-tenant Row Level Security (RLS) di Supabase.",
+  "Berpengalaman mengembangkan proyek website E-commerce menggunakan framework modern serta manajemen database CRUD berbasis MySQL.",
+  "Menyelesaikan Praktik Kerja Lapangan (PKL) selama 4 bulan sebagai Back End Developer di BBPPMPV BMTI Kemdikbud, Cimahi.",
+  "Aktif memperdalam rekayasa perangkat lunak melalui pendidikan Sistem Informasi di Universitas Galuh (UNIGAL) dan sertifikasi Dicoding Indonesia.",
 ];
 
-export const PEER_TESTIMONIALS: PeerTestimonial[] = [
+export const EDUCATION_ENTRIES: EducationEntry[] = [
   {
-    id: "testi-01",
-    author: "Rizky Darmawan",
-    role: "VP of Engineering",
-    company: "Nusantara Finansial",
-    initials: "RD",
-    quote:
-      "Arif merekonstruksi mesin settlement kami dari nol. Waktu rekonsiliasi turun dari 4 jam menjadi di bawah 2 detik dengan nol insiden double-spend.",
-    verified: true,
+    id: "edu-unigal",
+    institution: "Universitas Galuh (UNIGAL)",
+    degree_and_field: "S1 Sistem Informasi",
+    period: "Sep 2025 — Sep 2029",
+    skills: ["Sistem Informasi", "Pengembangan Web", "Back-End Architecture"],
   },
   {
-    id: "testi-02",
-    author: "Dimas Prawira",
-    role: "Head of Product",
-    company: "Katalogin Commerce",
-    initials: "DP",
-    quote:
-      "Kombinasi langka antara ketajaman arsitektur database PostgreSQL dan kepekaan tinggi terhadap detail antarmuka dashboard operasional.",
-    verified: true,
-  },
-  {
-    id: "testi-03",
-    author: "dr. Ratna Wulandari",
-    role: "Clinical Operations Director",
-    company: "Jaringan Medika Nusantara",
-    initials: "RW",
-    quote:
-      "Workspace rekam medis yang dirancang Arif memangkas waktu input dokter spesialis hampir separuhnya tanpa mengorbankan audit keamanan data.",
-    verified: true,
-  },
-  {
-    id: "testi-04",
-    author: "Budi Santoso",
-    role: "Principal Cloud Architect",
-    company: "Lokadata Cloud",
-    initials: "BS",
-    quote:
-      "Kode yang ditulis Arif selalu bersih, terdokumentasi dengan baik, dan tahan banting saat lonjakan trafik puncak terjadi di produksi.",
-    verified: true,
+    id: "edu-smkn1-ciamis",
+    institution: "SMKN 1 Ciamis",
+    degree_and_field: "Computer Programming / Rekayasa Perangkat Lunak",
+    period: "Jul 2022 — Mei 2025",
+    grade: "IPK / Nilai: 87,91",
+    skills: [
+      "Back-End Web Development",
+      "Laravel",
+      "PHP",
+      "JavaScript",
+      "React.js",
+      "Tailwind CSS",
+      "MySQL",
+    ],
   },
 ];
 
-// Deterministic 32-week x 7-day engineering activity matrix (values 0..4)
-export const ACTIVITY_HEATMAP_WEEKS: number[][] = Array.from(
-  { length: 32 },
-  (_, weekIdx) =>
-    Array.from({ length: 7 }, (_, dayIdx) => {
-      const seed = (weekIdx * 13 + dayIdx * 7 + (weekIdx % 5) * 3) % 11;
-      if (seed <= 2) return 0;
-      if (seed <= 4) return 1;
-      if (seed <= 6) return 2;
-      if (seed <= 8) return 3;
-      return 4;
-    })
-);
+export const CERTIFICATION_ENTRIES: CertificationEntry[] = [
+  {
+    id: "cert-dicoding-backend",
+    title: "Belajar Back-End Pemula dengan JavaScript",
+    issuer: "Dicoding Indonesia",
+    issued: "Sep 2025",
+    expires: "Sep 2028",
+    credential_id: "L4PQ2G092ZO1",
+    credential_url: "https://www.dicoding.com/certificates/L4PQ2G092ZO1",
+  },
+  {
+    id: "cert-dicoding-prompt",
+    title: "Prompt Engineering untuk Software Developer",
+    issuer: "Dicoding Indonesia",
+    issued: "Sep 2025",
+    expires: "Sep 2028",
+    credential_id: "53XEKN8NVXRN",
+    credential_url: "https://www.dicoding.com/certificates/53XEKN8NVXRN",
+  },
+  {
+    id: "cert-dicoding-js",
+    title: "Belajar Dasar Pemrograman JavaScript",
+    issuer: "Dicoding Indonesia",
+    issued: "Sep 2025",
+    expires: "Sep 2028",
+    credential_id: "JMZVE6K83PN9",
+    credential_url: "https://www.dicoding.com/certificates/JMZVE6K83PN9",
+  },
+  {
+    id: "cert-dicoding-ai",
+    title: "Belajar Dasar AI",
+    issuer: "Dicoding Indonesia",
+    issued: "Sep 2025",
+    expires: "Sep 2028",
+    credential_id: "JMZVEKRN3PN9",
+    credential_url: "https://www.dicoding.com/certificates/JMZVEKRN3PN9",
+  },
+];
