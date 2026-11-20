@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { getAuthenticatedAdmin } from "@/lib/actions/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
@@ -109,6 +109,7 @@ export async function createProjectAction(
         };
       }
 
+      updateTag("projects");
       revalidatePath("/");
       revalidatePath("/projects");
       revalidatePath("/admin/projects");
@@ -116,6 +117,7 @@ export async function createProjectAction(
     }
   }
 
+  updateTag("projects");
   revalidatePath("/");
   revalidatePath("/projects");
   revalidatePath("/admin/projects");
@@ -146,6 +148,7 @@ export async function toggleProjectPublishAction(
     }
   }
 
+  updateTag("projects");
   revalidatePath("/");
   revalidatePath("/projects");
   revalidatePath("/admin/projects");
@@ -171,6 +174,7 @@ export async function deleteProjectAction(
     }
   }
 
+  updateTag("projects");
   revalidatePath("/");
   revalidatePath("/projects");
   revalidatePath("/admin/projects");
@@ -233,6 +237,7 @@ export async function createNoteAction(
         };
       }
 
+      updateTag("notes");
       revalidatePath("/");
       revalidatePath("/notes");
       revalidatePath("/admin/notes");
@@ -240,6 +245,7 @@ export async function createNoteAction(
     }
   }
 
+  updateTag("notes");
   revalidatePath("/");
   revalidatePath("/notes");
   revalidatePath("/admin/notes");
@@ -270,6 +276,7 @@ export async function toggleNotePublishAction(
     }
   }
 
+  updateTag("notes");
   revalidatePath("/");
   revalidatePath("/notes");
   revalidatePath("/admin/notes");
@@ -329,11 +336,18 @@ export async function updateProfileSettingsAction(
   if (isSupabaseConfigured()) {
     const supabase = await createSupabaseServerClient();
     if (supabase) {
-      const { data: existing } = await supabase
+      const { data: existing, error: selectError } = await supabase
         .from("profile_settings")
         .select("id")
         .limit(1)
         .maybeSingle();
+
+      if (selectError) {
+        return {
+          success: false,
+          error: `Gagal membaca tabel profile_settings: ${selectError.message}`,
+        };
+      }
 
       if (existing?.id) {
         const { data, error } = await supabase
@@ -358,16 +372,54 @@ export async function updateProfileSettingsAction(
           };
         }
 
-        revalidatePath("/");
+        updateTag("profile");
+        revalidatePath("/", "layout");
         revalidatePath("/contact");
         revalidatePath("/admin");
         revalidatePath("/admin/settings");
         return { success: true, data: data as ProfileSettings };
       }
+
+      const { data: inserted, error: insertError } = await supabase
+        .from("profile_settings")
+        .insert({
+          full_name: parsed.data.full_name,
+          headline: parsed.data.headline,
+          bio: INITIAL_PROFILE_SETTINGS.bio,
+          location: parsed.data.location,
+          email: parsed.data.email,
+          github_url: INITIAL_PROFILE_SETTINGS.github_url,
+          linkedin_url: INITIAL_PROFILE_SETTINGS.linkedin_url,
+          resume_url: INITIAL_PROFILE_SETTINGS.resume_url,
+          availability_status: parsed.data.availability_status,
+          availability_note: parsed.data.availability_note,
+          years_of_experience: INITIAL_PROFILE_SETTINGS.years_of_experience,
+          systems_architected: INITIAL_PROFILE_SETTINGS.systems_architected,
+          avg_latency_reduction_pct:
+            INITIAL_PROFILE_SETTINGS.avg_latency_reduction_pct,
+          updated_at: updatedProfile.updated_at,
+        })
+        .select("*")
+        .single();
+
+      if (insertError) {
+        return {
+          success: false,
+          error: `Gagal membuat profil di Supabase: ${insertError.message}`,
+        };
+      }
+
+      updateTag("profile");
+      revalidatePath("/", "layout");
+      revalidatePath("/contact");
+      revalidatePath("/admin");
+      revalidatePath("/admin/settings");
+      return { success: true, data: inserted as ProfileSettings };
     }
   }
 
-  revalidatePath("/");
+  updateTag("profile");
+  revalidatePath("/", "layout");
   revalidatePath("/contact");
   revalidatePath("/admin");
   revalidatePath("/admin/settings");

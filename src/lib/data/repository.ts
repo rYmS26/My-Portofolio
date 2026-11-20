@@ -1,3 +1,4 @@
+import { cacheTag } from "next/cache";
 import {
   INITIAL_EXPERIENCES,
   INITIAL_INQUIRIES,
@@ -17,6 +18,7 @@ import type {
 
 export async function getProfileSettings(): Promise<ProfileSettings> {
   "use cache";
+  cacheTag("profile");
 
   const supabase = createSupabasePublicClient();
   if (!supabase) {
@@ -42,6 +44,7 @@ export async function getProfileSettings(): Promise<ProfileSettings> {
 
 export async function getPublishedProjects(): Promise<ProjectCaseStudy[]> {
   "use cache";
+  cacheTag("projects");
 
   const supabase = createSupabasePublicClient();
   if (!supabase) {
@@ -69,6 +72,7 @@ export async function getProjectBySlug(
   slug: string
 ): Promise<ProjectCaseStudy | null> {
   "use cache";
+  cacheTag("projects");
 
   const supabase = createSupabasePublicClient();
   if (!supabase) {
@@ -128,6 +132,7 @@ export async function getAllProjectsForAdmin(): Promise<ProjectCaseStudy[]> {
 
 export async function getWorkExperiences(): Promise<WorkExperience[]> {
   "use cache";
+  cacheTag("experiences");
 
   const supabase = createSupabasePublicClient();
   if (!supabase) {
@@ -152,6 +157,7 @@ export async function getWorkExperiences(): Promise<WorkExperience[]> {
 
 export async function getPublishedNotes(): Promise<EngineeringNote[]> {
   "use cache";
+  cacheTag("notes");
 
   const supabase = createSupabasePublicClient();
   if (!supabase) {
@@ -201,6 +207,7 @@ export async function getNoteBySlug(
   slug: string
 ): Promise<EngineeringNote | null> {
   "use cache";
+  cacheTag("notes");
 
   const supabase = createSupabasePublicClient();
   if (!supabase) {

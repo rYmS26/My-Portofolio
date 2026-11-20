@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-import { INITIAL_PROFILE_SETTINGS } from "@/lib/data/seed";
+import { getProfileSettings } from "@/lib/data/repository";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,19 +15,24 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: `${INITIAL_PROFILE_SETTINGS.full_name} — ${INITIAL_PROFILE_SETTINGS.headline}`,
-    template: `%s | ${INITIAL_PROFILE_SETTINGS.full_name}`,
-  },
-  description: INITIAL_PROFILE_SETTINGS.bio,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const profile = await getProfileSettings();
+  return {
+    title: {
+      default: `${profile.full_name} — ${profile.headline}`,
+      template: `%s | ${profile.full_name}`,
+    },
+    description: profile.bio,
+  };
+}
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const profile = await getProfileSettings();
+
   return (
     <html
       lang="id"
@@ -35,11 +40,11 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-white text-zinc-900 selection:bg-zinc-900 selection:text-white">
         <Navbar
-          availabilityStatus={INITIAL_PROFILE_SETTINGS.availability_status}
-          fullName={INITIAL_PROFILE_SETTINGS.full_name}
+          availabilityStatus={profile.availability_status}
+          fullName={profile.full_name}
         />
         <main className="flex-1">{children}</main>
-        <Footer />
+        <Footer profile={profile} />
       </body>
     </html>
   );

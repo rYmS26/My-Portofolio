@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, CheckCircle2, Save } from "lucide-react";
@@ -41,6 +42,7 @@ export function SettingsManager({
 }: {
   initialProfile: ProfileSettings;
 }) {
+  const router = useRouter();
   const [feedback, setFeedback] = React.useState<{
     tone: "success" | "error";
     text: string;
@@ -80,8 +82,9 @@ export function SettingsManager({
 
     setFeedback({
       tone: "success",
-      text: "Pengaturan profil & status ketersediaan kerja berhasil disimpan.",
+      text: "Pengaturan profil & status ketersediaan kerja berhasil disimpan ke database Supabase.",
     });
+    router.refresh();
   };
 
   return (

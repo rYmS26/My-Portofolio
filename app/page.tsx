@@ -75,6 +75,16 @@ export default async function HomePage() {
     }))
   );
 
+  const initials = profile.full_name
+    .split(",")[0]
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase();
+
   return (
     <div className="bg-white">
       {/* 1. HERO BRANDING BOX (Unique Dot-Grid Architectural Canvas + Interactive Status) */}
@@ -129,7 +139,7 @@ export default async function HomePage() {
             <div className="relative shrink-0">
               <div className="size-20 rounded-full bg-zinc-900 text-white border-2 border-white ring-1 ring-zinc-200 flex flex-col items-center justify-center select-none shadow-xs">
                 <span className="font-mono text-xl font-semibold tracking-tight">
-                  AP
+                  {initials || "DF"}
                 </span>
                 <span className="font-mono text-[9px] text-zinc-400 uppercase tracking-widest">
                   ENG

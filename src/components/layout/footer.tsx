@@ -1,9 +1,21 @@
 import Link from "next/link";
 import { ArrowUpRight, Terminal } from "lucide-react";
-import { INITIAL_PROFILE_SETTINGS } from "@/lib/data/seed";
+import type { ProfileSettings } from "@/types/portfolio";
 
-export function Footer() {
-  const profile = INITIAL_PROFILE_SETTINGS;
+function getInitials(fullName: string): string {
+  const words = fullName
+    .split(",")[0]
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+  if (words.length === 0) return "DF";
+  if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+  return `${words[0][0]}${words[1][0]}`.toUpperCase();
+}
+
+export function Footer({ profile }: { profile: ProfileSettings }) {
+  const displayName = profile.full_name.split(",")[0].trim();
+  const initials = getInitials(profile.full_name);
 
   return (
     <footer className="border-t border-zinc-200/80 bg-white mt-auto">
@@ -24,7 +36,8 @@ export function Footer() {
                 <Terminal className="size-3.5" aria-hidden="true" />
               </span>
               <span className="font-mono text-base font-semibold tracking-tight text-zinc-900">
-                AP<span className="text-emerald-600">.</span>
+                {initials}
+                <span className="text-emerald-600">.</span>
               </span>
             </div>
           </div>
@@ -32,12 +45,12 @@ export function Footer() {
           <div className="sm:col-span-7 py-8 px-6 flex flex-col items-center justify-center gap-1.5 bg-white">
             <div className="inline-flex items-center gap-2 text-lg font-semibold tracking-tight text-zinc-900">
               <span className="font-mono text-xs px-1.5 py-0.5 rounded-md bg-zinc-900 text-white">
-                AP
+                {initials}
               </span>
-              <span>Arif Pratama</span>
+              <span>{displayName}</span>
             </div>
             <p className="text-xs font-mono text-zinc-500">
-              Full-Stack & Distributed Systems Architecture
+              {profile.headline}
             </p>
           </div>
         </div>
