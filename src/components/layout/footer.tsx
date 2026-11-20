@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Lock, Terminal } from "lucide-react";
+import { ArrowUpRight, Terminal } from "lucide-react";
 import { INITIAL_PROFILE_SETTINGS } from "@/lib/data/seed";
 
 export function Footer() {
@@ -78,14 +78,6 @@ export function Footer() {
               <span>GitHub</span>
               <ArrowUpRight className="size-3" aria-hidden="true" />
             </a>
-            <span className="text-zinc-300">/</span>
-            <Link
-              href="/admin"
-              className="inline-flex items-center gap-1 hover:text-emerald-700 transition-colors font-mono"
-            >
-              <Lock className="size-3" aria-hidden="true" />
-              <span>CMS</span>
-            </Link>
           </div>
 
           <p className="text-[11px] font-mono text-zinc-400 tabular-nums pt-1">

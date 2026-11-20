@@ -27,7 +27,7 @@ interface AdminNavItem {
 
 export interface AdminSidebarProps {
   adminEmail: string;
-  authMode: "supabase" | "local_demo";
+  authMode: "supabase";
   counts: {
     projects: number;
     experiences: number;

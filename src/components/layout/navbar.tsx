@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Lock, Menu, Terminal, X } from "lucide-react";
+import { Menu, Terminal, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { AvailabilityStatus } from "@/types/portfolio";
 
@@ -86,23 +86,6 @@ export function Navbar({
               </Link>
             );
           })}
-
-          <span className="h-4 w-px bg-zinc-200 mx-1" aria-hidden="true" />
-
-          <Link
-            href="/admin"
-            title="Admin CMS Workspace"
-            className={cn(
-              "h-8 px-2.5 rounded-md inline-flex items-center gap-1.5 text-xs font-mono transition-[color,background-color,border-color] duration-150 ease-out",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2",
-              pathname.startsWith("/admin")
-                ? "bg-emerald-50 text-emerald-700 border border-emerald-200/60 font-medium"
-                : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100"
-            )}
-          >
-            <Lock className="size-3" aria-hidden="true" />
-            <span>CMS</span>
-          </Link>
         </nav>
 
         <button
@@ -144,13 +127,6 @@ export function Navbar({
                 </Link>
               );
             })}
-            <Link
-              href="/admin"
-              className="h-9 px-3 rounded-lg flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50 border-t border-zinc-100 mt-2 pt-2"
-            >
-              <Lock className="size-3.5 text-zinc-500" aria-hidden="true" />
-              <span>Admin CMS Workspace</span>
-            </Link>
           </div>
         </div>
       )}

@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getAuthenticatedAdmin } from "@/lib/actions/auth";
 import {
@@ -9,6 +10,13 @@ import {
 } from "@/lib/data/repository";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { Skeleton } from "@/components/ui/ui-states";
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 function AdminShellSkeleton() {
   return (

@@ -1,16 +1,13 @@
 "use server";
 
-import { cookies } from "next/headers";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { loginSchema, type LoginFormValues } from "@/lib/validations/auth";
 import type { ActionResponse } from "@/types/portfolio";
 
-const DEMO_SESSION_COOKIE = "devfolio_admin_session";
-
 export interface AuthenticatedAdmin {
   email: string;
-  authMode: "supabase" | "local_demo";
+  authMode: "supabase";
   signedInAt: string;
 }
 
@@ -19,66 +16,39 @@ export async function signInAdminAction(
 ): Promise<ActionResponse<{ redirectTo: string }>> {
   const parsed = loginSchema.safeParse(values);
   if (!parsed.success) {
-    const firstIssue = parsed.error.issues[0];
     return {
       success: false,
-      error: firstIssue?.message ?? "Data kredensial tidak valid.",
+      error: "Email atau kata sandi tidak valid.",
+    };
+  }
+
+  if (!isSupabaseConfigured()) {
+    return {
+      success: false,
+      error: "Layanan autentikasi belum dikonfigurasi pada server.",
+    };
+  }
+
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) {
+    return {
+      success: false,
+      error: "Layanan autentikasi tidak tersedia.",
     };
   }
 
   const { email, password } = parsed.data;
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
 
-  if (isSupabaseConfigured()) {
-    const supabase = await createSupabaseServerClient();
-    if (supabase) {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        return {
-          success: false,
-          error: `Autentikasi Supabase ditolak: ${error.message}`,
-        };
-      }
-
-      return {
-        success: true,
-        data: { redirectTo: "/admin" },
-      };
-    }
-  }
-
-  const expectedEmail =
-    process.env.ADMIN_DEMO_EMAIL ?? "arif.pratama@devfolio.id";
-  const expectedPassword =
-    process.env.ADMIN_DEMO_PASSWORD ?? "DevFolio#2026";
-
-  if (
-    email.toLowerCase() !== expectedEmail.toLowerCase() ||
-    password !== expectedPassword
-  ) {
+  if (error) {
     return {
       success: false,
-      error:
-        "Email atau kata sandi tidak cocok. Gunakan kredensial Admin Demo yang tertera pada panel samping.",
+      error: "Email atau kata sandi tidak valid.",
     };
   }
-
-  const cookieStore = await cookies();
-  const payload: AuthenticatedAdmin = {
-    email: expectedEmail,
-    authMode: "local_demo",
-    signedInAt: new Date().toISOString(),
-  };
-
-  cookieStore.set(DEMO_SESSION_COOKIE, JSON.stringify(payload), {
-    httpOnly: true,
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 7,
-  });
 
   return {
     success: true,
@@ -96,9 +66,6 @@ export async function signOutAdminAction(): Promise<
     }
   }
 
-  const cookieStore = await cookies();
-  cookieStore.delete(DEMO_SESSION_COOKIE);
-
   return {
     success: true,
     data: { redirectTo: "/login" },
@@ -106,39 +73,30 @@ export async function signOutAdminAction(): Promise<
 }
 
 export async function getAuthenticatedAdmin(): Promise<AuthenticatedAdmin | null> {
-  if (isSupabaseConfigured()) {
-    const supabase = await createSupabaseServerClient();
-    if (supabase) {
-      try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-
-        if (user?.email) {
-          return {
-            email: user.email,
-            authMode: "supabase",
-            signedInAt: user.last_sign_in_at ?? new Date().toISOString(),
-          };
-        }
-      } catch {
-        // Lanjut ke pemeriksaan cookie demo lokal
-      }
-    }
+  if (!isSupabaseConfigured()) {
+    return null;
   }
 
-  const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get(DEMO_SESSION_COOKIE)?.value;
-  if (!sessionCookie) {
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) {
     return null;
   }
 
   try {
-    const parsed = JSON.parse(sessionCookie) as AuthenticatedAdmin;
-    if (parsed && typeof parsed.email === "string") {
-      return parsed;
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+
+    if (error || !user?.email) {
+      return null;
     }
-    return null;
+
+    return {
+      email: user.email,
+      authMode: "supabase",
+      signedInAt: user.last_sign_in_at ?? new Date().toISOString(),
+    };
   } catch {
     return null;
   }
