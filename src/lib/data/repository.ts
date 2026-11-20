@@ -5,6 +5,7 @@ import {
   INITIAL_PROFILE_SETTINGS,
   INITIAL_PROJECTS,
 } from "@/lib/data/seed";
+import { createSupabasePublicClient } from "@/lib/supabase/public";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type {
   EngineeringNote,
@@ -15,7 +16,9 @@ import type {
 } from "@/types/portfolio";
 
 export async function getProfileSettings(): Promise<ProfileSettings> {
-  const supabase = await createSupabaseServerClient();
+  "use cache";
+
+  const supabase = createSupabasePublicClient();
   if (!supabase) {
     return INITIAL_PROFILE_SETTINGS;
   }
@@ -38,7 +41,9 @@ export async function getProfileSettings(): Promise<ProfileSettings> {
 }
 
 export async function getPublishedProjects(): Promise<ProjectCaseStudy[]> {
-  const supabase = await createSupabaseServerClient();
+  "use cache";
+
+  const supabase = createSupabasePublicClient();
   if (!supabase) {
     return INITIAL_PROJECTS.filter((project) => project.published);
   }
@@ -63,7 +68,9 @@ export async function getPublishedProjects(): Promise<ProjectCaseStudy[]> {
 export async function getProjectBySlug(
   slug: string
 ): Promise<ProjectCaseStudy | null> {
-  const supabase = await createSupabaseServerClient();
+  "use cache";
+
+  const supabase = createSupabasePublicClient();
   if (!supabase) {
     return (
       INITIAL_PROJECTS.find(
@@ -120,7 +127,9 @@ export async function getAllProjectsForAdmin(): Promise<ProjectCaseStudy[]> {
 }
 
 export async function getWorkExperiences(): Promise<WorkExperience[]> {
-  const supabase = await createSupabaseServerClient();
+  "use cache";
+
+  const supabase = createSupabasePublicClient();
   if (!supabase) {
     return INITIAL_EXPERIENCES;
   }
@@ -142,7 +151,9 @@ export async function getWorkExperiences(): Promise<WorkExperience[]> {
 }
 
 export async function getPublishedNotes(): Promise<EngineeringNote[]> {
-  const supabase = await createSupabaseServerClient();
+  "use cache";
+
+  const supabase = createSupabasePublicClient();
   if (!supabase) {
     return INITIAL_NOTES.filter((note) => note.published);
   }
@@ -189,7 +200,9 @@ export async function getAllNotesForAdmin(): Promise<EngineeringNote[]> {
 export async function getNoteBySlug(
   slug: string
 ): Promise<EngineeringNote | null> {
-  const supabase = await createSupabaseServerClient();
+  "use cache";
+
+  const supabase = createSupabasePublicClient();
   if (!supabase) {
     return (
       INITIAL_NOTES.find((note) => note.slug === slug && note.published) ?? null
