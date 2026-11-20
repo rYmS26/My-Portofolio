@@ -164,6 +164,38 @@ export async function getPublishedNotes(): Promise<EngineeringNote[]> {
   }
 }
 
+export async function getNoteBySlug(
+  slug: string
+): Promise<EngineeringNote | null> {
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) {
+    return (
+      INITIAL_NOTES.find((note) => note.slug === slug && note.published) ?? null
+    );
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from("posts")
+      .select("*")
+      .eq("slug", slug)
+      .maybeSingle();
+
+    if (error || !data) {
+      return (
+        INITIAL_NOTES.find((note) => note.slug === slug && note.published) ??
+        null
+      );
+    }
+
+    return data as EngineeringNote;
+  } catch {
+    return (
+      INITIAL_NOTES.find((note) => note.slug === slug && note.published) ?? null
+    );
+  }
+}
+
 export async function getAllInquiriesForAdmin(): Promise<HireInquiry[]> {
   const supabase = await createSupabaseServerClient();
   if (!supabase) {

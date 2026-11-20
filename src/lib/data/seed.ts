@@ -9,7 +9,7 @@ import type {
 
 export const INITIAL_PROFILE_SETTINGS: ProfileSettings = {
   id: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
-  full_name: "Arif Праtama, S.Kom.",
+  full_name: "Arif Pratama, S.Kom.",
   headline: "Senior Full-Stack & Distributed Systems Engineer",
   bio: "Merancang arsitektur aplikasi web berkinerja tinggi, sistem pembayaran konkurensi tinggi, dan infrastruktur data berbasis PostgreSQL & Next.js. Berpengalaman lebih dari 6 tahun membangun produk B2B SaaS serta fintech di Asia Tenggara.",
   location: "Jakarta Selatan, Indonesia (UTC+7)",

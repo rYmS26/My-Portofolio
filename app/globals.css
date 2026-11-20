@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fafafa;
+  --background: #ffffff;
   --foreground: #18181b;
 }
 
@@ -16,4 +16,19 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+.bg-dot-grid {
+  background-image: radial-gradient(rgba(24, 24, 27, 0.12) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.bg-hatched-divider {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 6px,
+    rgba(228, 228, 231, 0.65) 6px,
+    rgba(228, 228, 231, 0.65) 7px
+  );
 }

@@ -3,15 +3,8 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  ArrowUpRight,
-  Lock,
-  Menu,
-  Terminal,
-  X,
-} from "lucide-react";
+import { Lock, Menu, Terminal, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { AvailabilityBadge } from "@/components/ui/badge";
 import type { AvailabilityStatus } from "@/types/portfolio";
 
 interface NavItem {
@@ -20,10 +13,10 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "Ringkasan", href: "/" },
-  { label: "Studi Kasus", href: "/projects" },
-  { label: "Catatan Teknis", href: "/notes" },
-  { label: "Diskusi & Hire", href: "/contact" },
+  { label: "Portfolio", href: "/" },
+  { label: "Projects", href: "/projects" },
+  { label: "Notes", href: "/notes" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export interface NavbarProps {
@@ -42,31 +35,34 @@ export function Navbar({
     setMobileMenuOpen(false);
   }, [pathname]);
 
-  return (
-    <header className="sticky top-0 z-30 h-14 bg-white/80 backdrop-blur-md border-b border-zinc-200/80">
-      <div className="max-w-6xl mx-auto h-full px-4 sm:px-6 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2.5 text-sm font-semibold tracking-tight text-zinc-900 rounded-lg py-1 px-1.5 -ml-1.5 transition-[color,background-color] duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2"
-          >
-            <span className="size-7 rounded-lg bg-zinc-900 text-white inline-flex items-center justify-center shadow-2xs">
-              <Terminal className="size-4" aria-hidden="true" />
-            </span>
-            <span>{fullName}</span>
-            <span className="text-xs font-mono font-normal text-zinc-400 hidden sm:inline tabular-nums">
-              v2026.11
-            </span>
-          </Link>
+  const statusDotColor =
+    availabilityStatus === "available"
+      ? "bg-emerald-500"
+      : availabilityStatus === "open_to_selective"
+      ? "bg-amber-500"
+      : "bg-red-500";
 
-          <div className="hidden md:block pl-2 border-l border-zinc-200/80">
-            <AvailabilityBadge status={availabilityStatus} />
-          </div>
-        </div>
+  return (
+    <header className="sticky top-0 z-30 bg-white/85 backdrop-blur-md border-b border-zinc-200/80">
+      <div className="max-w-3xl mx-auto border-x border-zinc-200/80 h-12 px-4 sm:px-5 flex items-center justify-between gap-4">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-xs font-semibold tracking-tight text-zinc-900 rounded-md py-1 px-1 -ml-1 transition-[color] duration-150 ease-out hover:text-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2"
+        >
+          <span className="size-5 rounded-md bg-zinc-900 text-white inline-flex items-center justify-center">
+            <Terminal className="size-3" aria-hidden="true" />
+          </span>
+          <span className="font-mono">{fullName.split(",")[0]}</span>
+          <span
+            className={cn("size-1.5 rounded-full", statusDotColor)}
+            title={`Status: ${availabilityStatus}`}
+            aria-hidden="true"
+          />
+        </Link>
 
         <nav
           aria-label="Navigasi Utama"
-          className="hidden md:flex items-center gap-1"
+          className="hidden sm:flex items-center gap-1"
         >
           {NAV_ITEMS.map((item) => {
             const isActive =
@@ -79,57 +75,54 @@ export function Navbar({
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "h-9 px-3 rounded-lg inline-flex items-center text-sm transition-[color,background-color] duration-150 ease-out",
+                  "h-8 px-2.5 rounded-md inline-flex items-center text-xs transition-[color,background-color] duration-150 ease-out",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2",
                   isActive
                     ? "bg-zinc-100 text-zinc-900 font-medium"
-                    : "text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50"
+                    : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50"
                 )}
               >
                 {item.label}
               </Link>
             );
           })}
-        </nav>
 
-        <div className="hidden md:flex items-center gap-2">
+          <span className="h-4 w-px bg-zinc-200 mx-1" aria-hidden="true" />
+
           <Link
             href="/admin"
-            className="h-9 px-3 rounded-lg inline-flex items-center gap-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 border border-zinc-200/80 transition-[color,background-color,border-color,transform] duration-150 ease-out active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2"
+            title="Admin CMS Workspace"
+            className={cn(
+              "h-8 px-2.5 rounded-md inline-flex items-center gap-1.5 text-xs font-mono transition-[color,background-color,border-color] duration-150 ease-out",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2",
+              pathname.startsWith("/admin")
+                ? "bg-emerald-50 text-emerald-700 border border-emerald-200/60 font-medium"
+                : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100"
+            )}
           >
-            <Lock className="size-3.5 text-zinc-500" aria-hidden="true" />
-            <span>CMS Workspace</span>
+            <Lock className="size-3" aria-hidden="true" />
+            <span>CMS</span>
           </Link>
-          <Link
-            href="/contact"
-            className="h-9 px-3.5 rounded-lg inline-flex items-center gap-1.5 text-sm font-medium bg-zinc-900 text-white hover:bg-zinc-800 shadow-xs transition-[color,background-color,border-color,transform,box-shadow] duration-150 ease-out active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2"
-          >
-            <span>Jadwalkan Diskusi</span>
-            <ArrowUpRight className="size-4" aria-hidden="true" />
-          </Link>
-        </div>
+        </nav>
 
         <button
           type="button"
           aria-expanded={mobileMenuOpen}
           aria-label={mobileMenuOpen ? "Tutup menu navigasi" : "Buka menu navigasi"}
           onClick={() => setMobileMenuOpen((prev) => !prev)}
-          className="md:hidden inline-flex items-center justify-center size-9 rounded-lg border border-zinc-200/80 bg-white text-zinc-700 hover:bg-zinc-100 transition-[color,background-color,border-color,transform] duration-150 ease-out active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2"
+          className="sm:hidden inline-flex items-center justify-center size-8 rounded-md border border-zinc-200/80 bg-white text-zinc-700 hover:bg-zinc-100 transition-[color,background-color,transform] duration-150 ease-out active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900"
         >
           {mobileMenuOpen ? (
-            <X className="size-5" aria-hidden="true" />
+            <X className="size-4" aria-hidden="true" />
           ) : (
-            <Menu className="size-5" aria-hidden="true" />
+            <Menu className="size-4" aria-hidden="true" />
           )}
         </button>
       </div>
 
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-zinc-200/80 bg-white px-4 pt-3 pb-4 shadow-xs">
-          <div className="mb-3">
-            <AvailabilityBadge status={availabilityStatus} />
-          </div>
-          <nav aria-label="Navigasi Mobile" className="flex flex-col gap-1">
+        <div className="sm:hidden border-t border-zinc-200/80 bg-white">
+          <div className="max-w-3xl mx-auto border-x border-zinc-200/80 px-4 py-3 space-y-1">
             {NAV_ITEMS.map((item) => {
               const isActive =
                 item.href === "/"
@@ -141,7 +134,7 @@ export function Navbar({
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "h-9 px-3 rounded-lg inline-flex items-center text-sm",
+                    "h-9 px-3 rounded-lg flex items-center text-sm",
                     isActive
                       ? "bg-zinc-100 text-zinc-900 font-medium"
                       : "text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50"
@@ -151,21 +144,12 @@ export function Navbar({
                 </Link>
               );
             })}
-          </nav>
-          <div className="mt-3 pt-3 border-t border-zinc-100 flex items-center gap-2">
             <Link
               href="/admin"
-              className="flex-1 h-9 px-3 rounded-lg inline-flex items-center justify-center gap-1.5 text-xs font-medium text-zinc-700 bg-zinc-100 hover:bg-zinc-200/80"
+              className="h-9 px-3 rounded-lg flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50 border-t border-zinc-100 mt-2 pt-2"
             >
-              <Lock className="size-3.5" aria-hidden="true" />
-              <span>CMS Workspace</span>
-            </Link>
-            <Link
-              href="/contact"
-              className="flex-1 h-9 px-3 rounded-lg inline-flex items-center justify-center gap-1.5 text-xs font-medium bg-zinc-900 text-white hover:bg-zinc-800"
-            >
-              <span>Jadwalkan Diskusi</span>
-              <ArrowUpRight className="size-3.5" aria-hidden="true" />
+              <Lock className="size-3.5 text-zinc-500" aria-hidden="true" />
+              <span>Admin CMS Workspace</span>
             </Link>
           </div>
         </div>

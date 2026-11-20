@@ -33,7 +33,7 @@ export default function RootLayout({
       lang="id"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-zinc-50/80 text-zinc-900 selection:bg-zinc-900 selection:text-white">
+      <body className="min-h-full flex flex-col bg-white text-zinc-900 selection:bg-zinc-900 selection:text-white">
         <Navbar
           availabilityStatus={INITIAL_PROFILE_SETTINGS.availability_status}
           fullName={INITIAL_PROFILE_SETTINGS.full_name}
