@@ -164,6 +164,28 @@ export async function getPublishedNotes(): Promise<EngineeringNote[]> {
   }
 }
 
+export async function getAllNotesForAdmin(): Promise<EngineeringNote[]> {
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) {
+    return INITIAL_NOTES;
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from("posts")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error || !data || data.length === 0) {
+      return INITIAL_NOTES;
+    }
+
+    return data as EngineeringNote[];
+  } catch {
+    return INITIAL_NOTES;
+  }
+}
+
 export async function getNoteBySlug(
   slug: string
 ): Promise<EngineeringNote | null> {

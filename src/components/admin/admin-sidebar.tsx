@@ -4,7 +4,6 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  Briefcase,
   Database,
   FileText,
   FolderKanban,
@@ -12,6 +11,7 @@ import {
   LayoutDashboard,
   LogOut,
   ShieldCheck,
+  SlidersHorizontal,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signOutAdminAction } from "@/lib/actions/auth";
@@ -53,27 +53,26 @@ export function AdminSidebar({
     },
     {
       label: "Studi Kasus Proyek",
-      href: "/admin?tab=projects",
+      href: "/admin/projects",
       icon: FolderKanban,
       count: counts.projects,
     },
     {
-      label: "Timeline Karir",
-      href: "/admin?tab=experiences",
-      icon: Briefcase,
-      count: counts.experiences,
-    },
-    {
       label: "Catatan Teknis",
-      href: "/admin?tab=notes",
+      href: "/admin/notes",
       icon: FileText,
       count: counts.notes,
     },
     {
       label: "Kotak Masuk (Hire)",
-      href: "/admin?tab=inquiries",
+      href: "/admin/inquiries",
       icon: Inbox,
       count: counts.unreadInquiries,
+    },
+    {
+      label: "Profil & Availability",
+      href: "/admin/settings",
+      icon: SlidersHorizontal,
     },
   ];
 
@@ -107,11 +106,14 @@ export function AdminSidebar({
         <nav aria-label="Menu Admin CMS" className="space-y-1">
           {navItems.map((item) => {
             const Icon = item.icon;
-            const isActive = pathname === item.href;
+            const isActive =
+              item.href === "/admin"
+                ? pathname === "/admin"
+                : pathname.startsWith(item.href);
 
             return (
               <Link
-                key={item.label}
+                key={item.href}
                 href={item.href}
                 className={cn(
                   "h-9 px-3 rounded-lg flex items-center justify-between text-sm transition-[color,background-color] duration-150 ease-out",
@@ -142,7 +144,7 @@ export function AdminSidebar({
           </div>
           <div className="flex items-center gap-2 text-xs text-zinc-500 px-1">
             <ShieldCheck className="size-3.5 text-emerald-700" aria-hidden="true" />
-            <span>Auth Middleware Verified</span>
+            <span>Auth Session Verified</span>
           </div>
           <Button
             type="button"
