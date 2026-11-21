@@ -6,15 +6,30 @@ import {
   INITIAL_PROFILE_SETTINGS,
   INITIAL_PROJECTS,
 } from "@/lib/data/seed";
+import { EDUCATION_ENTRIES } from "@/lib/data/editorial";
 import { createSupabasePublicClient } from "@/lib/supabase/public";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type {
+  EducationRecord,
   EngineeringNote,
   HireInquiry,
   ProfileSettings,
   ProjectCaseStudy,
   WorkExperience,
 } from "@/types/portfolio";
+
+const FALLBACK_EDUCATIONS: EducationRecord[] = EDUCATION_ENTRIES.map(
+  (entry, idx) => ({
+    id: entry.id,
+    institution: entry.institution,
+    degree_and_field: entry.degree_and_field,
+    period: entry.period,
+    grade: entry.grade ?? null,
+    skills: entry.skills,
+    display_order: idx + 1,
+    created_at: "2025-09-01T00:00:00+07:00",
+  })
+);
 
 export async function getProfileSettings(): Promise<ProfileSettings> {
   "use cache";
@@ -257,5 +272,54 @@ export async function getAllInquiriesForAdmin(): Promise<HireInquiry[]> {
     return data as HireInquiry[];
   } catch {
     return INITIAL_INQUIRIES;
+  }
+}
+
+export async function getEducations(): Promise<EducationRecord[]> {
+  "use cache";
+  cacheTag("educations");
+
+  const supabase = createSupabasePublicClient();
+  if (!supabase) {
+    return FALLBACK_EDUCATIONS;
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from("educations")
+      .select("*")
+      .order("display_order", { ascending: true })
+      .order("created_at", { ascending: false });
+
+    if (error || !data || data.length === 0) {
+      return FALLBACK_EDUCATIONS;
+    }
+
+    return data as EducationRecord[];
+  } catch {
+    return FALLBACK_EDUCATIONS;
+  }
+}
+
+export async function getAllEducationsForAdmin(): Promise<EducationRecord[]> {
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) {
+    return FALLBACK_EDUCATIONS;
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from("educations")
+      .select("*")
+      .order("display_order", { ascending: true })
+      .order("created_at", { ascending: false });
+
+    if (error || !data || data.length === 0) {
+      return FALLBACK_EDUCATIONS;
+    }
+
+    return data as EducationRecord[];
+  } catch {
+    return FALLBACK_EDUCATIONS;
   }
 }

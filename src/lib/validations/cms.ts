@@ -133,3 +133,26 @@ export const profileSettingsSchema = z.object({
 });
 
 export type ProfileSettingsFormValues = z.infer<typeof profileSettingsSchema>;
+
+export const educationFormSchema = z.object({
+  institution: z
+    .string()
+    .trim()
+    .min(2, "Nama institusi pendidikan wajib diisi."),
+  degree_and_field: z
+    .string()
+    .trim()
+    .min(2, "Jenjang & jurusan wajib diisi (misal: S1 Sistem Informasi)."),
+  period: z
+    .string()
+    .trim()
+    .min(4, "Periode wajib diisi (misal: Sep 2025 — Sep 2029)."),
+  grade: z.string().trim().optional(),
+  skills_csv: z
+    .string()
+    .trim()
+    .min(2, "Masukkan minimal 1 keahlian dipisahkan koma."),
+  display_order: z.number().int().min(1).max(99),
+});
+
+export type EducationFormValues = z.infer<typeof educationFormSchema>;

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getAuthenticatedAdmin } from "@/lib/actions/auth";
 import {
+  getAllEducationsForAdmin,
   getAllInquiriesForAdmin,
   getAllProjectsForAdmin,
   getPublishedNotes,
@@ -55,12 +56,14 @@ async function AdminAuthenticatedShell({
     redirect("/login");
   }
 
-  const [projects, experiences, notes, inquiries] = await Promise.all([
-    getAllProjectsForAdmin(),
-    getWorkExperiences(),
-    getPublishedNotes(),
-    getAllInquiriesForAdmin(),
-  ]);
+  const [projects, experiences, educations, notes, inquiries] =
+    await Promise.all([
+      getAllProjectsForAdmin(),
+      getWorkExperiences(),
+      getAllEducationsForAdmin(),
+      getPublishedNotes(),
+      getAllInquiriesForAdmin(),
+    ]);
 
   const unreadCount = inquiries.filter((inq) => inq.status === "unread").length;
 
@@ -72,6 +75,7 @@ async function AdminAuthenticatedShell({
         counts={{
           projects: projects.length,
           experiences: experiences.length,
+          educations: educations.length,
           notes: notes.length,
           unreadInquiries: unreadCount,
         }}

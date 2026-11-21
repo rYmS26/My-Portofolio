@@ -73,13 +73,18 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "border border-dashed border-zinc-300 rounded-xl p-8 text-center bg-white",
+        "border border-dashed border-zinc-300 dark:border-zinc-800 rounded-xl p-8 text-center bg-white dark:bg-zinc-900/50",
         className
       )}
     >
-      <Icon className="size-8 text-zinc-400 mx-auto mb-3" aria-hidden="true" />
-      <h3 className="text-sm font-medium text-zinc-900">{title}</h3>
-      <p className="mt-1 text-sm leading-relaxed text-zinc-600 text-pretty max-w-md mx-auto">
+      <Icon
+        className="size-8 text-zinc-400 dark:text-zinc-500 mx-auto mb-3"
+        aria-hidden="true"
+      />
+      <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+        {title}
+      </h3>
+      <p className="mt-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 text-pretty max-w-md mx-auto">
         {description}
       </p>
       {actionLabel && (actionHref || onAction) && (

@@ -228,37 +228,37 @@ export function ExperienceAccordion({
   }
 
   return (
-    <div className="divide-y divide-zinc-200/80">
+    <div className="divide-y divide-zinc-200/80 dark:divide-zinc-800">
       {experiences.map((exp) => {
         const isOpen = openIds.includes(exp.id);
         return (
-          <div key={exp.id} className="bg-white">
+          <div key={exp.id} className="bg-white dark:bg-zinc-950">
             <button
               type="button"
               aria-expanded={isOpen}
               onClick={() => toggleItem(exp.id)}
-              className="w-full px-5 py-4 text-left flex items-start justify-between gap-4 hover:bg-zinc-50/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-zinc-900"
+              className="w-full px-5 py-4 text-left flex items-start justify-between gap-4 hover:bg-zinc-50/80 dark:hover:bg-zinc-900/70 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100"
             >
               <div className="flex items-start gap-3 min-w-0">
-                <span className="size-8 rounded-lg border border-zinc-200/80 bg-zinc-50 text-zinc-700 inline-flex items-center justify-center shrink-0 mt-0.5">
+                <span className="size-8 rounded-lg border border-zinc-200/80 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 inline-flex items-center justify-center shrink-0 mt-0.5">
                   <Briefcase className="size-4" aria-hidden="true" />
                 </span>
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-sm font-medium text-zinc-900">
+                    <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                       {exp.company_name}
                     </span>
                     {exp.is_current && (
                       <span
-                        className="size-2 rounded-full bg-emerald-500 ring-2 ring-emerald-100"
+                        className="size-2 rounded-full bg-emerald-500 ring-2 ring-emerald-100 dark:ring-emerald-950"
                         title="Posisi Aktif Saat Ini"
                       />
                     )}
                   </div>
-                  <p className="text-xs text-zinc-600 mt-0.5">
+                  <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-0.5">
                     {exp.role_title}
                   </p>
-                  <p className="text-[11px] font-mono text-zinc-400 mt-1 tabular-nums">
+                  <p className="text-[11px] font-mono text-zinc-400 dark:text-zinc-500 mt-1 tabular-nums">
                     {exp.employment_type} • {exp.start_date} —{" "}
                     {exp.is_current ? "Sekarang" : exp.end_date} • {exp.location}
                   </p>
@@ -267,15 +267,15 @@ export function ExperienceAccordion({
 
               <ChevronDown
                 className={`size-4 text-zinc-400 shrink-0 mt-1.5 transition-transform duration-150 ease-out ${
-                  isOpen ? "rotate-180 text-zinc-900" : ""
+                  isOpen ? "rotate-180 text-zinc-900 dark:text-zinc-100" : ""
                 }`}
                 aria-hidden="true"
               />
             </button>
 
             {isOpen && (
-              <div className="px-5 pb-5 pt-1 pl-16 space-y-3 border-t border-zinc-100 bg-zinc-50/40">
-                <ul className="space-y-2 list-disc pl-4 text-xs sm:text-sm leading-relaxed text-zinc-600 marker:text-zinc-400">
+              <div className="px-5 pb-5 pt-1 pl-16 space-y-3 border-t border-zinc-100 dark:border-zinc-900 bg-zinc-50/40 dark:bg-zinc-900/40">
+                <ul className="space-y-2 list-disc pl-4 text-xs sm:text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 marker:text-zinc-400">
                   {exp.highlights.map((bullet) => (
                     <li key={bullet} className="text-pretty">
                       {bullet}
@@ -287,7 +287,7 @@ export function ExperienceAccordion({
                   {exp.tech_used.map((tech) => (
                     <span
                       key={tech}
-                      className="text-[11px] font-mono bg-white text-zinc-700 border border-zinc-200/80 px-2 py-0.5 rounded-md"
+                      className="text-[11px] font-mono bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200/80 dark:border-zinc-800 px-2 py-0.5 rounded-md"
                     >
                       {tech}
                     </span>
@@ -329,32 +329,32 @@ export function ProjectsAccordion({
 
   return (
     <div>
-      <div className="divide-y divide-zinc-200/80">
+      <div className="divide-y divide-zinc-200/80 dark:divide-zinc-800">
         {projects.map((project) => {
           const isOpen = openIds.includes(project.id);
           return (
             <div
               key={project.id}
               id={`project-${project.slug}`}
-              className="bg-white scroll-mt-16"
+              className="bg-white dark:bg-zinc-950 scroll-mt-16"
             >
               <button
                 type="button"
                 aria-expanded={isOpen}
                 onClick={() => toggleItem(project.id)}
-                className="w-full px-5 py-4 text-left flex items-start justify-between gap-4 hover:bg-zinc-50/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-zinc-900"
+                className="w-full px-5 py-4 text-left flex items-start justify-between gap-4 hover:bg-zinc-50/80 dark:hover:bg-zinc-900/70 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100"
               >
                 <div className="flex items-start gap-3 min-w-0">
-                  <span className="size-8 rounded-lg border border-zinc-200/80 bg-zinc-50 text-zinc-700 inline-flex items-center justify-center shrink-0 mt-0.5">
+                  <span className="size-8 rounded-lg border border-zinc-200/80 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 inline-flex items-center justify-center shrink-0 mt-0.5">
                     <Terminal className="size-4" aria-hidden="true" />
                   </span>
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-sm font-medium text-zinc-900">
+                      <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                         {project.title}
                       </span>
                     </div>
-                    <p className="text-[11px] font-mono text-zinc-400 mt-0.5 tabular-nums">
+                    <p className="text-[11px] font-mono text-zinc-400 dark:text-zinc-500 mt-0.5 tabular-nums">
                       {project.code} • {project.period} • {project.client_or_company}
                     </p>
                   </div>
@@ -362,27 +362,27 @@ export function ProjectsAccordion({
 
                 <ChevronDown
                   className={`size-4 text-zinc-400 shrink-0 mt-1.5 transition-transform duration-150 ease-out ${
-                    isOpen ? "rotate-180 text-zinc-900" : ""
+                    isOpen ? "rotate-180 text-zinc-900 dark:text-zinc-100" : ""
                   }`}
                   aria-hidden="true"
                 />
               </button>
 
               {isOpen && (
-                <div className="px-5 pb-5 pt-2 pl-16 space-y-3.5 border-t border-zinc-100 bg-zinc-50/40">
-                  <p className="text-xs sm:text-sm leading-relaxed text-zinc-600 text-pretty">
+                <div className="px-5 pb-5 pt-2 pl-16 space-y-3.5 border-t border-zinc-100 dark:border-zinc-900 bg-zinc-50/40 dark:bg-zinc-900/40">
+                  <p className="text-xs sm:text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 text-pretty">
                     {project.summary}
                   </p>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs leading-relaxed text-zinc-600">
-                    <div className="bg-white border border-zinc-200/80 rounded-lg p-3 space-y-1">
-                      <span className="block font-mono text-[11px] uppercase tracking-wider text-zinc-400">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
+                    <div className="bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 rounded-lg p-3 space-y-1">
+                      <span className="block font-mono text-[11px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
                         Arsitektur Sistem
                       </span>
                       <p className="text-pretty">{project.architecture_overview}</p>
                     </div>
-                    <div className="bg-white border border-zinc-200/80 rounded-lg p-3 space-y-1">
-                      <span className="block font-mono text-[11px] uppercase tracking-wider text-zinc-400">
+                    <div className="bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 rounded-lg p-3 space-y-1">
+                      <span className="block font-mono text-[11px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
                         Tantangan Teknis
                       </span>
                       <p className="text-pretty">{project.technical_challenges}</p>
@@ -393,15 +393,15 @@ export function ProjectsAccordion({
                     {project.key_metrics.map((metric) => (
                       <div
                         key={metric.label}
-                        className="bg-white border border-zinc-200/80 rounded-lg px-3 py-2"
+                        className="bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 rounded-lg px-3 py-2"
                       >
-                        <span className="block text-[11px] text-zinc-500">
+                        <span className="block text-[11px] text-zinc-500 dark:text-zinc-400">
                           {metric.label}
                         </span>
-                        <span className="text-xs font-mono font-semibold text-zinc-900 tabular-nums">
+                        <span className="text-xs font-mono font-semibold text-zinc-900 dark:text-zinc-100 tabular-nums">
                           {metric.value}{" "}
                           {metric.delta && (
-                            <span className="text-emerald-700 font-normal">
+                            <span className="text-emerald-700 dark:text-emerald-400 font-normal">
                               ({metric.delta})
                             </span>
                           )}
@@ -414,7 +414,7 @@ export function ProjectsAccordion({
                     {project.tech_stack.map((tech) => (
                       <span
                         key={tech}
-                        className="text-[11px] font-mono bg-white text-zinc-700 border border-zinc-200/80 px-2 py-0.5 rounded-md"
+                        className="text-[11px] font-mono bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200/80 dark:border-zinc-800 px-2 py-0.5 rounded-md"
                       >
                         {tech}
                       </span>
@@ -427,7 +427,7 @@ export function ProjectsAccordion({
                         href={project.repo_url}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1 font-medium text-zinc-900 hover:text-emerald-700 transition-colors"
+                        className="inline-flex items-center gap-1 font-medium text-zinc-900 dark:text-zinc-100 hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors"
                       >
                         <GitBranch className="size-3.5" aria-hidden="true" />
                         <span>Repository</span>
@@ -438,7 +438,7 @@ export function ProjectsAccordion({
                         href={project.live_url}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1 text-zinc-600 hover:text-zinc-900 transition-colors"
+                        className="inline-flex items-center gap-1 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
                       >
                         <span>Live Demo</span>
                         <ArrowUpRight className="size-3.5" aria-hidden="true" />

@@ -5,15 +5,18 @@ import { getAuthenticatedAdmin } from "@/lib/actions/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import {
+  educationFormSchema,
   noteFormSchema,
   profileSettingsSchema,
   projectFormSchema,
+  type EducationFormValues,
   type NoteFormValues,
   type ProfileSettingsFormValues,
   type ProjectFormValues,
 } from "@/lib/validations/cms";
 import type {
   ActionResponse,
+  EducationRecord,
   EngineeringNote,
   InquiryStatus,
   ProfileSettings,
@@ -427,4 +430,103 @@ export async function updateProfileSettingsAction(
   revalidatePath("/admin");
   revalidatePath("/admin/settings");
   return { success: true, data: updatedProfile };
+}
+
+export async function createEducationAction(
+  values: EducationFormValues
+): Promise<ActionResponse<EducationRecord>> {
+  const unauthorized = await requireAdmin();
+  if (unauthorized) return unauthorized;
+
+  const parsed = educationFormSchema.safeParse(values);
+  if (!parsed.success) {
+    return {
+      success: false,
+      error:
+        parsed.error.issues[0]?.message ?? "Data pendidikan tidak valid.",
+    };
+  }
+
+  const skills = parsed.data.skills_csv
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  const newEducation: EducationRecord = {
+    id: crypto.randomUUID(),
+    institution: parsed.data.institution,
+    degree_and_field: parsed.data.degree_and_field,
+    period: parsed.data.period,
+    grade: parsed.data.grade?.trim() ? parsed.data.grade.trim() : null,
+    skills,
+    display_order: parsed.data.display_order,
+    created_at: new Date().toISOString(),
+  };
+
+  if (isSupabaseConfigured()) {
+    const supabase = await createSupabaseServerClient();
+    if (supabase) {
+      const { data, error } = await supabase
+        .from("educations")
+        .insert({
+          institution: newEducation.institution,
+          degree_and_field: newEducation.degree_and_field,
+          period: newEducation.period,
+          grade: newEducation.grade,
+          skills: newEducation.skills,
+          display_order: newEducation.display_order,
+        })
+        .select("*")
+        .single();
+
+      if (error) {
+        return {
+          success: false,
+          error: `Gagal menyimpan pendidikan ke Supabase (pastikan tabel public.educations sudah dibuat): ${error.message}`,
+        };
+      }
+
+      updateTag("educations");
+      revalidatePath("/");
+      revalidatePath("/admin");
+      revalidatePath("/admin/education");
+      return { success: true, data: data as EducationRecord };
+    }
+  }
+
+  updateTag("educations");
+  revalidatePath("/");
+  revalidatePath("/admin");
+  revalidatePath("/admin/education");
+  return { success: true, data: newEducation };
+}
+
+export async function deleteEducationAction(
+  id: string
+): Promise<ActionResponse<{ id: string }>> {
+  const unauthorized = await requireAdmin();
+  if (unauthorized) return unauthorized;
+
+  if (isSupabaseConfigured()) {
+    const supabase = await createSupabaseServerClient();
+    if (supabase) {
+      const { error } = await supabase
+        .from("educations")
+        .delete()
+        .eq("id", id);
+
+      if (error) {
+        return {
+          success: false,
+          error: `Gagal menghapus data pendidikan: ${error.message}`,
+        };
+      }
+    }
+  }
+
+  updateTag("educations");
+  revalidatePath("/");
+  revalidatePath("/admin");
+  revalidatePath("/admin/education");
+  return { success: true, data: { id } };
 }

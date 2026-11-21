@@ -72,6 +72,17 @@ export interface WorkExperience {
   created_at: string;
 }
 
+export interface EducationRecord {
+  id: string;
+  institution: string;
+  degree_and_field: string;
+  period: string;
+  grade: string | null;
+  skills: string[];
+  display_order: number;
+  created_at: string;
+}
+
 export type NoteCategory =
   | "System Architecture"
   | "Database & SQL"

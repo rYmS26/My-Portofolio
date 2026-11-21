@@ -7,6 +7,7 @@ import {
   Database,
   FileText,
   FolderKanban,
+  GraduationCap,
   Inbox,
   LayoutDashboard,
   LogOut,
@@ -31,6 +32,7 @@ export interface AdminSidebarProps {
   counts: {
     projects: number;
     experiences: number;
+    educations: number;
     notes: number;
     unreadInquiries: number;
   };
@@ -56,6 +58,12 @@ export function AdminSidebar({
       href: "/admin/projects",
       icon: FolderKanban,
       count: counts.projects,
+    },
+    {
+      label: "Pendidikan (Education)",
+      href: "/admin/education",
+      icon: GraduationCap,
+      count: counts.educations,
     },
     {
       label: "Catatan Teknis",

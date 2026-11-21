@@ -10,11 +10,15 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 }
 
 const toneClasses: Record<BadgeTone, string> = {
-  neutral: "bg-zinc-100 text-zinc-700 border-zinc-200/80",
-  success: "bg-emerald-50 text-emerald-700 border-emerald-200/60",
-  warning: "bg-amber-50 text-amber-700 border-amber-200/60",
-  danger: "bg-red-50 text-red-700 border-red-200/60",
-  mono: "bg-zinc-50 text-zinc-800 border-zinc-200/80 font-mono tabular-nums",
+  neutral:
+    "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200/80 dark:border-zinc-700",
+  success:
+    "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border-emerald-200/60 dark:border-emerald-800/70",
+  warning:
+    "bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border-amber-200/60 dark:border-amber-800/70",
+  danger:
+    "bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-400 border-red-200/60 dark:border-red-800/70",
+  mono: "bg-zinc-50 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 border-zinc-200/80 dark:border-zinc-800 font-mono tabular-nums",
 };
 
 const dotClasses: Record<BadgeTone, string> = {

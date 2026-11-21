@@ -1,8 +1,17 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #18181b;
+  color-scheme: light;
+}
+
+.dark {
+  --background: #09090b;
+  --foreground: #f4f4f5;
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -23,6 +32,10 @@ body {
   background-size: 16px 16px;
 }
 
+.dark .bg-dot-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+}
+
 .bg-hatched-divider {
   background-image: repeating-linear-gradient(
     -45deg,
@@ -30,5 +43,15 @@ body {
     transparent 6px,
     rgba(228, 228, 231, 0.65) 6px,
     rgba(228, 228, 231, 0.65) 7px
+  );
+}
+
+.dark .bg-hatched-divider {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 6px,
+    rgba(39, 39, 42, 0.85) 6px,
+    rgba(39, 39, 42, 0.85) 7px
   );
 }

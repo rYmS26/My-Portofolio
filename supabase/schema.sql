@@ -106,6 +106,20 @@ create table if not exists public.inquiries (
 
 create index if not exists idx_inquiries_status_created on public.inquiries (status, created_at desc);
 
+-- 6. TABEL EDUCATIONS (Riwayat Pendidikan Dinamis)
+create table if not exists public.educations (
+  id uuid primary key default gen_random_uuid(),
+  institution text not null,
+  degree_and_field text not null,
+  period text not null,
+  grade text,
+  skills text[] not null default '{}',
+  display_order integer not null default 1,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists idx_educations_order on public.educations (display_order asc, created_at desc);
+
 -- ============================================================================
 -- ROW LEVEL SECURITY (RLS) POLICIES (Optimized with scalar subquery initPlan)
 -- ============================================================================
@@ -115,6 +129,7 @@ alter table public.projects enable row level security;
 alter table public.experiences enable row level security;
 alter table public.posts enable row level security;
 alter table public.inquiries enable row level security;
+alter table public.educations enable row level security;
 
 -- Public Read Access for Portfolio Data
 create policy "Public can read profile_settings"
@@ -170,6 +185,17 @@ create policy "Admin can manage posts"
 
 create policy "Admin can read and update inquiries"
   on public.inquiries for all
+  to authenticated
+  using ((select auth.uid()) is not null)
+  with check ((select auth.uid()) is not null);
+
+create policy "Public can read educations"
+  on public.educations for select
+  to anon, authenticated
+  using (true);
+
+create policy "Admin can manage educations"
+  on public.educations for all
   to authenticated
   using ((select auth.uid()) is not null)
   with check ((select auth.uid()) is not null);
